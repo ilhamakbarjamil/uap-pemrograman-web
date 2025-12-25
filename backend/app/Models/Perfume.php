@@ -36,4 +36,12 @@ class Perfume extends Model
         'stock' => 'integer',
         'size_ml' => 'integer',
     ];
+
+    /**
+     * Get the transactions for the perfume.
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

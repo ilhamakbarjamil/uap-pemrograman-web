@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Parfum Haji Akbar</title>
+    <link href="./output.css" rel="stylesheet">
+    <style>
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .admin-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+        .admin-card:hover {
+            border-color: rgba(234, 179, 8, 0.3);
+            transform: translateY(-2px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-200 bg-gray-950 min-h-screen selection:bg-yellow-500/30">
+    <!-- Header -->
+    <header class="glass-nav sticky top-0 left-0 w-full z-40">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-yellow-500 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <h1 class="text-xl font-black tracking-tight text-white uppercase">Admin <span class="text-yellow-500">Panel</span></h1>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden sm:block">
+                    <p id="userName" class="text-sm font-bold text-white"></p>
+                    <p class="text-[10px] text-yellow-500 uppercase tracking-widest font-semibold">Administrator</p>
+                </div>
+                <button id="logoutBtn" class="bg-red-500/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-lg text-sm font-bold transition-all border border-red-500/20">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Main Navigation Tabs -->
+        <div class="flex flex-wrap gap-2 mb-8 p-1 bg-gray-900/50 w-fit rounded-2xl border border-gray-800">
+            <button id="productsTab" class="px-8 py-3 rounded-xl font-bold transition-all duration-200 text-yellow-500 bg-gray-800 shadow-lg">
+                📦 Manajemen Produk
+            </button>
+            <button id="transactionsTab" class="px-8 py-3 rounded-xl font-bold transition-all duration-200 text-gray-400 hover:text-gray-200">
+                📜 Riwayat Transaksi
+            </button>
+        </div>
+
+        <!-- Products Section -->
+        <div id="productsSection" class="space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gray-900/40 p-6 rounded-3xl border border-gray-800">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Daftar Inventaris</h2>
+                    <p class="text-sm text-gray-400">Kelola stok dan detail produk parfum Anda</p>
+                </div>
+                <button id="addProductBtn" class="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-400 text-gray-950 px-6 py-3 rounded-xl font-black shadow-lg shadow-yellow-500/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Tambah Produk Baru
+                </button>
+            </div>
+
+            <div id="loadingMessage" class="flex flex-col items-center py-20 text-gray-500">
+                <div class="animate-spin h-10 w-10 border-4 border-yellow-500 border-t-transparent rounded-full mb-4"></div>
+                <p>Sinkronisasi data...</p>
+            </div>
+            <div id="errorMessage" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 px-6 py-4 rounded-2xl text-center"></div>
+
+            <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Product cards injected here -->
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactionsSection" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white">Log Transaksi</h2>
+                <button id="refreshTransactionsBtn" class="p-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-all border border-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="transactionsContainer" class="bg-gray-900/50 border border-gray-800 rounded-3xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-800/50">
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Waktu Transaksi</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Pembeli</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Produk</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Qty</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Total Harga</th>
+                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTableBody" class="divide-y divide-gray-800/50">
+                            <!-- Rows injected here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="transactionsEmpty" class="hidden text-center py-20 text-gray-500 italic">Belum ada aktivitas transaksi</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-gray-950/90 backdrop-blur-sm"></div>
+        <div class="relative bg-gray-900 border border-gray-800 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="sticky top-0 bg-gray-900 p-6 border-b border-gray-800 flex justify-between items-center">
+                <h3 id="modalTitle" class="text-xl font-bold text-white">Konfigurasi Produk</h3>
+                <button onclick="document.getElementById('productModal').classList.add('hidden')" class="text-gray-500 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round"></path></svg>
+                </button>
+            </div>
+            
+            <form id="productForm" class="p-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Nama Produk</label>
+                        <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Brand</label>
+                        <input type="text" id="brand" name="brand" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="md:col-span-2 space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Deskripsi Aroma</label>
+                        <textarea id="description" name="description" rows="3" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all"></textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Harga (Rp)</label>
+                        <input type="number" id="price" name="price" step="0.01" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Stok Unit</label>
+                        <input type="number" id="stock" name="stock" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Ukuran (ml)</label>
+                        <input type="number" id="size_ml" name="size_ml" required class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Kategori</label>
+                        <input type="text" id="category" name="category" required placeholder="Contoh: Woody, Floral" class="w-full px-4 py-3 rounded-xl bg-gray-800 border border-gray-700 focus:border-yellow-500 focus:outline-none transition-all">
+                    </div>
+                    <div class="md:col-span-2 space-y-2">
+                        <label class="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Foto Produk</label>
+                        <input type="file" id="file" name="file" accept="image/*" class="w-full px-4 py-2 rounded-xl bg-gray-800 border border-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-yellow-500 file:text-gray-900 hover:file:bg-yellow-400">
+                    </div>
+                </div>
+
+                <div id="productErrorMessage" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-xl text-xs italic text-center"></div>
+
+                <div class="flex gap-4 pt-4">
+                    <button type="button" id="cancelProduct" class="flex-1 px-6 py-4 rounded-xl font-bold text-gray-400 hover:bg-gray-800 transition-all border border-gray-800">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-4 bg-yellow-500 hover:bg-yellow-400 text-gray-900 rounded-xl font-black shadow-lg shadow-yellow-500/20 transition-all active:scale-95">
+                        Simpan Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { perfumeAPI, transactionAPI, authAPI, getUser } from './api.js';
+
+        let editingProductId = null;
+
+        // Check auth
+        const user = getUser();
+        if (!user || user.role !== 'admin') {
+            window.location.href = user ? './dashboard.html' : './login.html';
+        } else {
+            document.getElementById('userName').textContent = user.name;
+        }
+
+        async function loadProducts() {
+            const loadingMsg = document.getElementById('loadingMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            const productsGrid = document.getElementById('productsGrid');
+
+            try {
+                const perfumes = await perfumeAPI.getAll();
+                loadingMsg.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+
+                if (perfumes.length === 0) {
+                    productsGrid.innerHTML = '<p class="col-span-full text-center text-gray-600 py-10 italic">Belum ada inventaris produk.</p>';
+                    return;
+                }
+
+                productsGrid.innerHTML = perfumes.map(perfume => {
+                    let imageUrl = 'https://placehold.co/300x300/1f2937/9ca3af?text=No+Image';
+                    if (perfume.file_path) {
+                        let cleanPath = perfume.file_path.startsWith('/') ? perfume.file_path.substring(1) : perfume.file_path;
+                        imageUrl = `http://localhost:8000/storage/${cleanPath}`;
+                    }
+                    
+                    return `
+                    <div class="admin-card rounded-3xl p-5 flex flex-col h-full">
+                        <div class="relative mb-4 group overflow-hidden rounded-2xl aspect-square">
+                            <img src="${imageUrl}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/1f2937/9ca3af?text=Perfume'">
+                            <div class="absolute top-2 right-2 px-2 py-1 bg-gray-950/80 backdrop-blur-md rounded-lg text-[10px] font-bold text-yellow-500 border border-yellow-500/20">
+                                ${perfume.size_ml}ml
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-[10px] text-yellow-500 font-bold tracking-widest uppercase mb-1">${perfume.brand}</p>
+                            <h4 class="font-bold text-white mb-2 line-clamp-1">${perfume.name}</h4>
+                            <div class="flex justify-between items-end mb-4">
+                                <span class="text-sm font-black text-gray-200">Rp${parseFloat(perfume.price).toLocaleString('id-ID')}</span>
+                                <span class="text-[10px] text-gray-500 font-bold">STOK: ${perfume.stock}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editProduct(${perfume.id})" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-gray-700 flex items-center justify-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                Edit
+                            </button>
+                            <button onclick="deleteProduct(${perfume.id})" class="flex-1 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-red-500/20 flex items-center justify-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+                }).join('');
+            } catch (error) {
+                loadingMsg.classList.add('hidden');
+                errorMsg.textContent = error.message;
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        window.editProduct = async (productId) => {
+            try {
+                const perfume = await perfumeAPI.getById(productId);
+                editingProductId = productId;
+                document.getElementById('modalTitle').textContent = 'Perbarui Detail Produk';
+                document.getElementById('name').value = perfume.name;
+                document.getElementById('brand').value = perfume.brand;
+                document.getElementById('description').value = perfume.description;
+                document.getElementById('price').value = perfume.price;
+                document.getElementById('stock').value = perfume.stock;
+                document.getElementById('size_ml').value = perfume.size_ml;
+                document.getElementById('category').value = perfume.category;
+                document.getElementById('productModal').classList.remove('hidden');
+            } catch (error) { alert('Gagal memuat produk'); }
+        };
+
+        window.deleteProduct = async (productId) => {
+            if (confirm('Data produk akan dihapus permanen. Lanjutkan?')) {
+                try {
+                    await perfumeAPI.delete(productId);
+                    loadProducts();
+                } catch (error) { alert(error.message); }
+            }
+        };
+
+        document.getElementById('addProductBtn').addEventListener('click', () => {
+            editingProductId = null;
+            document.getElementById('modalTitle').textContent = 'Input Koleksi Baru';
+            document.getElementById('productForm').reset();
+            document.getElementById('productModal').classList.remove('hidden');
+        });
+
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorDiv = document.getElementById('productErrorMessage');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                brand: document.getElementById('brand').value,
+                description: document.getElementById('description').value,
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
+                size_ml: parseInt(document.getElementById('size_ml').value),
+                category: document.getElementById('category').value,
+            };
+
+            const fileInput = document.getElementById('file');
+            if (fileInput.files.length > 0) formData.file = fileInput.files[0];
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Menyimpan...';
+                if (editingProductId) await perfumeAPI.update(editingProductId, formData);
+                else await perfumeAPI.create(formData);
+                
+                document.getElementById('productModal').classList.add('hidden');
+                loadProducts();
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Simpan Data';
+            }
+        });
+
+        async function loadTransactions() {
+            const tableBody = document.getElementById('transactionsTableBody');
+            const emptyMsg = document.getElementById('transactionsEmpty');
+            try {
+                const transactions = await transactionAPI.getAll();
+                emptyMsg.classList.toggle('hidden', transactions.length > 0);
+                
+                transactions.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                tableBody.innerHTML = transactions.map(t => {
+                    const date = new Date(t.created_at).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
+                    return `
+                        <tr class="hover:bg-gray-800/30 transition-colors">
+                            <td class="px-6 py-4 text-xs text-gray-400 font-mono">${date}</td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-bold text-gray-200">${t.user?.name || 'Anonim'}</div>
+                                <div class="text-[10px] text-gray-500">${t.user?.email || '-'}</div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-semibold text-gray-300">${t.perfume?.name || 'Dihapus'}</div>
+                                <div class="text-[10px] text-yellow-500/70 font-bold uppercase tracking-widest">${t.perfume?.brand || ''}</div>
+                            </td>
+                            <td class="px-6 py-4 text-center text-sm font-black text-gray-400">${t.quantity}</td>
+                            <td class="px-6 py-4 text-sm font-black text-yellow-500">Rp${parseFloat(t.total_price).toLocaleString('id-ID')}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 bg-green-500/10 text-green-500 text-[10px] font-black uppercase rounded-full border border-green-500/20">Selesai</span>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (error) { console.error(error); }
+        }
+
+        // Tab System logic
+        const pTab = document.getElementById('productsTab');
+        const tTab = document.getElementById('transactionsTab');
+        const pSec = document.getElementById('productsSection');
+        const tSec = document.getElementById('transactionsSection');
+
+        pTab.onclick = () => {
+            pSec.classList.remove('hidden'); tSec.classList.add('hidden');
+            pTab.className = 'px-8 py-3 rounded-xl font-bold transition-all duration-200 text-yellow-500 bg-gray-800 shadow-lg';
+            tTab.className = 'px-8 py-3 rounded-xl font-bold transition-all duration-200 text-gray-400 hover:text-gray-200';
+        };
+
+        tTab.onclick = () => {
+            tSec.classList.remove('hidden'); pSec.classList.add('hidden');
+            tTab.className = 'px-8 py-3 rounded-xl font-bold transition-all duration-200 text-yellow-500 bg-gray-800 shadow-lg';
+            pTab.className = 'px-8 py-3 rounded-xl font-bold transition-all duration-200 text-gray-400 hover:text-gray-200';
+            loadTransactions();
+        };
+
+        document.getElementById('logoutBtn').onclick = () => confirm('Akhiri sesi admin?') && authAPI.logout();
+        document.getElementById('cancelProduct').onclick = () => document.getElementById('productModal').classList.add('hidden');
+        document.getElementById('refreshTransactionsBtn').onclick = loadTransactions;
+
+        loadProducts();
+    </script>
+</body>
+</html>

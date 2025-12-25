@@ -43,6 +43,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user', // Default role is user
         ]);
 
         return response()->json([
@@ -71,7 +72,10 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = Auth::guard('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'error' => 'Unauthorized',
+                'message' => 'Email atau password salah'
+            ], 401);
         }
 
         return $this->respondWithToken($token);
@@ -84,7 +88,13 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(Auth::guard('api')->user());
+        $user = Auth::guard('api')->user();
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ]);
     }
 
     /**
@@ -106,7 +116,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        $newToken = Auth::refresh();
+        $newToken = Auth::guard('api')->refresh();
         
         return $this->respondWithToken($newToken);
     }

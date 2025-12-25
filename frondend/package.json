@@ -1,0 +1,13 @@
+{
+  "name": "toko-parfum-frontend",
+  "version": "1.0.0",
+  "description": "Frontend untuk Toko Parfum",
+  "scripts": {
+    "serve": "npx http-server src -p 3000 -c-1",
+    "dev": "npx http-server src -p 3000 -c-1 --cors"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
+

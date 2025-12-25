@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Toko Parfum Premium</title>
+    <!-- Pastikan output.css Anda memuat utility Tailwind standard -->
+    <link href="./output.css" rel="stylesheet">
+    <style>
+        /* Animasi tambahan untuk mempercantik */
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bg-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(234, 179, 8, 0.05) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-100 bg-gray-950 min-h-screen flex items-center justify-center p-4 bg-pattern">
+    
+    <!-- Dekorasi Cahaya Latar Belakang -->
+    <div class="fixed top-0 -left-4 w-72 h-72 bg-yellow-500/10 rounded-full blur-[120px] -z-10"></div>
+    <div class="fixed bottom-0 -right-4 w-72 h-72 bg-yellow-600/10 rounded-full blur-[120px] -z-10"></div>
+
+    <div class="w-full max-w-md transition-all duration-500 hover:scale-[1.01]">
+        <div class="glass-effect rounded-2xl shadow-2xl p-8 md:p-10">
+            <!-- Header/Logo -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-500/10 rounded-full mb-4 border border-yellow-500/20">
+                    <!-- Icon Botol Parfum (SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.423 15.641a7 7 0 11-14.846 0V11.354c0-1.109.846-2.031 1.954-2.131a14.053 14.053 0 0110.938 0c1.108.1 1.954 1.022 1.954 2.131v4.287z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3M12 7V3" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-white mb-2">
+                    Selamat <span class="text-yellow-500">Datang</span>
+                </h1>
+                <p class="text-gray-400">Masuk untuk menjelajahi koleksi parfum eksklusif kami</p>
+            </div>
+            
+            <form id="loginForm" class="space-y-5">
+                <!-- Input Email -->
+                <div class="space-y-2">
+                    <label for="email" class="text-sm font-medium text-gray-300 ml-1">Email</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500 group-focus-within:text-yellow-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                            </svg>
+                        </div>
+                        <input type="email" id="email" name="email" required placeholder="nama@email.com"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all">
+                    </div>
+                </div>
+                
+                <!-- Input Password -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <label for="password" class="text-sm font-medium text-gray-300">Password</label>
+                        <a href="#" class="text-xs text-yellow-500 hover:text-yellow-400">Lupa password?</a>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500 group-focus-within:text-yellow-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <input type="password" id="password" name="password" required placeholder="••••••••"
+                            class="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-700 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500 transition-all">
+                    </div>
+                </div>
+                
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden animate-pulse bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-xl text-sm italic"></div>
+                
+                <!-- Button -->
+                <button type="submit" 
+                    class="w-full bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-bold py-3.5 rounded-xl shadow-lg shadow-yellow-500/20 transform active:scale-95 transition-all duration-200">
+                    Masuk Sekarang
+                </button>
+            </form>
+            
+            <div class="mt-8 space-y-4">
+                <p class="text-gray-400 text-center text-sm">
+                    Belum punya akun? 
+                    <a href="./register.html" class="text-yellow-500 font-semibold hover:underline decoration-2 underline-offset-4">Daftar sekarang</a>
+                </p>
+                
+                <div class="flex items-center justify-center space-x-2 text-gray-500">
+                    <span class="h-px w-8 bg-gray-700"></span>
+                    <a href="./index.html" class="text-xs uppercase tracking-widest hover:text-gray-300 transition-colors">Kembali ke Beranda</a>
+                    <span class="h-px w-8 bg-gray-700"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer Simple -->
+        <p class="text-center mt-8 text-gray-600 text-xs uppercase tracking-[0.2em]">
+            &copy; 2024 Luxury Parfum Lab.
+        </p>
+    </div>
+
+    <script type="module">
+        import { authAPI } from './api.js';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.classList.add('hidden');
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // UI Feedback
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mr-3 inline-block" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Memproses...
+            `;
+            
+            try {
+                const data = await authAPI.login(email, password);
+                
+                if (data.user && data.user.role === 'admin') {
+                    window.location.href = './admin-dashboard.html';
+                } else {
+                    window.location.href = './dashboard.html';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorDiv.textContent = error.message || 'Email atau password salah.';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Masuk Sekarang';
+            }
+        });
+    </script>
+</body>
+</html>
